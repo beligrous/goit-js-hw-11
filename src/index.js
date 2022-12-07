@@ -5,7 +5,7 @@ import axios from 'axios';
 
 const URL = 'https://pixabay.com/api/';
 const KEY = '31877726-de77d5eff1f0b572f2213dfa6';
-let query = 'cat';
+let query = '';
 let data = [];
 
 const refs = {
@@ -17,6 +17,11 @@ refs.form.addEventListener('submit', onSearchButton);
 
 function onSearchButton(e) {
   e.preventDefault();
+
+  if (query !== e.target.elements.searchQuery.value) {
+    refs.gallery.innerHTML = '';
+  }
+
   query = e.target.elements.searchQuery.value;
   onFetch().then(respdata => {
     console.log(respdata.hits);
