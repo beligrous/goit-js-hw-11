@@ -1,4 +1,5 @@
 import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
 import Notiflix from 'notiflix';
 import axios from 'axios';
 
@@ -18,17 +19,27 @@ function onSearchButton(e) {
   e.preventDefault();
   query = e.target.elements.searchQuery.value;
   onFetch().then(respdata => {
-    // console.log(respdata.hits);
+    console.log(respdata.hits);
     respdata.hits.map(item => data.push(item));
 
     const markup = data.map(i => render(i)).join('');
     refs.gallery.insertAdjacentHTML('beforeend', markup);
+
+    refs.gallery.addEventListener('click', onImageClick);
   });
 }
 
-function render({ webformatURL, tags, likes, views, comments, downloads }) {
-  const item = `<div class="photo-card">
-  <img src=${webformatURL} alt=${tags} loading="lazy" width="640px"  />
+function render({
+  webformatURL,
+  tags,
+  likes,
+  views,
+  comments,
+  downloads,
+  largeImageURL,
+}) {
+  const item = `<a href=${largeImageURL}><div class="photo-card">
+  <img src=${webformatURL} alt=${tags} loading="lazy"  />
   <div class="info">
     <p class="info-item">
       <b>Likes</b>${likes}
@@ -43,7 +54,7 @@ function render({ webformatURL, tags, likes, views, comments, downloads }) {
       <b>Downloads</b>${downloads}
     </p>
   </div>
-</div>`;
+</div></a>`;
   return item;
 }
 
@@ -54,4 +65,12 @@ async function onFetch() {
   return res;
 }
 
-console.log(data);
+function onImageClick(e) {
+  e.preventDefault();
+  if (e.target.nodeName !== 'IMG') {
+    return;
+  }
+  const lightbox = new SimpleLightbox('.gallery a', {
+    captionDelay: '250',
+  });
+}

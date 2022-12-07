@@ -1,5 +1,4 @@
-@import './common';
-
+@import '~node_modules/modern-normalize/modern-normalize.css';
 .gallery {
   display: flex;
   flex-wrap: wrap;
@@ -9,4 +8,4 @@
   text-align: center;
   background-color: cadetblue;
   padding: 20px;
-}
+}/*# sourceMappingURL=index.css.map */
