@@ -2,10 +2,29 @@
 .gallery {
   display: flex;
   flex-wrap: wrap;
+  gap: 20px;
 }
 
 .search-form {
   text-align: center;
   background-color: cadetblue;
   padding: 20px;
+}
+
+.info-item {
+  display: inline;
+  padding: 0 20px;
+}
+
+.info {
+  display: flex;
+}
+
+a {
+  width: calc((100% - 40px) / 3);
+  height: auto;
+}
+
+img {
+  width: 100%;
 }/*# sourceMappingURL=index.css.map */
