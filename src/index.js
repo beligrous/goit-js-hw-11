@@ -21,8 +21,6 @@ function onSearchButton(e) {
 
   query = e.target.elements.searchQuery.value;
 
-  console.log(query, e.target.elements.searchQuery.value);
-
   if (query !== e.target.elements.searchQuery.value) {
     refs.gallery.innerHTML = '';
   }
@@ -36,17 +34,18 @@ function onSearchButton(e) {
     respdata.hits.map(item => data.push(item));
     render(data);
 
-    // const markup = data.map(i => render(i)).join('');
-    // refs.gallery.insertAdjacentHTML('beforeend', markup);
-
     refs.gallery.addEventListener('click', onImageClick);
   });
 }
 
 function render() {
-  refs.gallery.innerHTML = '';
   const markup = data.map(template).join('');
+  refs.gallery.innerHTML = '';
   refs.gallery.insertAdjacentHTML('beforeend', markup);
+
+  const lightbox = new SimpleLightbox('.gallery a', {
+    captionDelay: '250',
+  });
 }
 
 async function onFetch() {
@@ -64,9 +63,7 @@ function onImageClick(e) {
   if (e.target.nodeName !== 'IMG') {
     return;
   }
-  const lightbox = new SimpleLightbox('.gallery a', {
-    captionDelay: '250',
-  });
+  lightbox();
 }
 
 function template({
