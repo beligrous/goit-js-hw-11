@@ -14,6 +14,7 @@ let data = [];
 const refs = {
   form: document.querySelector('#search-form'),
   gallery: document.querySelector('.gallery'),
+  loadMoreBtn: document.querySelector('.load-more'),
 };
 
 refs.form.addEventListener('submit', onSearchButton);
@@ -38,7 +39,13 @@ function onSearchButton(e) {
     respdata.hits.map(item => data.push(item));
     render(data);
 
-    refs.gallery.addEventListener('click', onImageClick);
+    refs.loadMoreBtn.addEventListener('click', () => {
+      page += 1;
+      onFetch().then(respdata => {
+        respdata.hits.map(item => data.push(item));
+        render(data);
+      });
+    });
   });
 }
 
@@ -46,6 +53,7 @@ function render() {
   const markup = data.map(template).join('');
   refs.gallery.innerHTML = '';
   refs.gallery.insertAdjacentHTML('beforeend', markup);
+  refs.loadMoreBtn.classList.remove('visually-hidden');
 
   const lightbox = new SimpleLightbox('.gallery a', {
     captionDelay: '250',
