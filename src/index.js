@@ -7,6 +7,8 @@ import axios from 'axios';
 const URL = 'https://pixabay.com/api/';
 const KEY = '31877726-de77d5eff1f0b572f2213dfa6';
 let query = '';
+let page = 1;
+const perPage = 40;
 let data = [];
 
 const refs = {
@@ -51,7 +53,7 @@ function render() {
 async function onFetch() {
   const res = await axios
     .get(
-      `${URL}?key=${KEY}&q=${query}&image_type=photo&orientation=horizontal&savesearch=true`
+      `${URL}?key=${KEY}&q=${query}&image_type=photo&orientation=horizontal&savesearch=true&page=${page}&per_page=${perPage}`
     )
     .then(res => res.data);
 
