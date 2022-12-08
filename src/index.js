@@ -7,7 +7,7 @@ import axios from 'axios';
 const URL = 'https://pixabay.com/api/';
 const KEY = '31877726-de77d5eff1f0b572f2213dfa6';
 let query = '';
-let page = 1;
+let page = 0;
 const perPage = 40;
 let data = [];
 
@@ -23,9 +23,11 @@ function onSearchButton(e) {
 
   query = e.target.elements.searchQuery.value;
 
-  if (query !== e.target.elements.searchQuery.value) {
-    refs.gallery.innerHTML = '';
-  }
+  page += 1;
+
+  // if (query !== e.target.elements.searchQuery.value) {
+  //   refs.gallery.innerHTML = '';
+  // }
 
   onFetch().then(respdata => {
     if (respdata.hits.length === 0) {
