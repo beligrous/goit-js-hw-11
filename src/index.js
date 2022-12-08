@@ -1,6 +1,7 @@
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 import Notiflix from 'notiflix';
+Notiflix.Notify.init({});
 import axios from 'axios';
 
 const URL = 'https://pixabay.com/api/';
@@ -24,6 +25,11 @@ function onSearchButton(e) {
 
   query = e.target.elements.searchQuery.value;
   onFetch().then(respdata => {
+    if (respdata.hits.length === 0) {
+      Notiflix.Notify.warning(
+        'Sorry, there are no images matching your search query. Please try again.'
+      );
+    }
     respdata.hits.map(item => data.push(item));
 
     const markup = data.map(i => render(i)).join('');
