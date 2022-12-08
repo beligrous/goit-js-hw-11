@@ -23,6 +23,7 @@ function onSearchButton(e) {
   e.preventDefault();
 
   query = e.target.elements.searchQuery.value;
+  refs.loadMoreBtn.classList.remove('visually-hidden');
 
   page += 1;
 
@@ -41,6 +42,13 @@ function onSearchButton(e) {
 
     refs.loadMoreBtn.addEventListener('click', () => {
       page += 1;
+      console.log(page * perPage, respdata.totalHits);
+      if (Number(page * perPage) > Number(respdata.totalHits)) {
+        Notiflix.Notify.warning(
+          "We're sorry, but you've reached the end of search results."
+        );
+        refs.loadMoreBtn.classList.add('visually-hidden');
+      }
       onFetch().then(respdata => {
         respdata.hits.map(item => data.push(item));
         render(data);
@@ -53,7 +61,6 @@ function render() {
   const markup = data.map(template).join('');
   refs.gallery.innerHTML = '';
   refs.gallery.insertAdjacentHTML('beforeend', markup);
-  refs.loadMoreBtn.classList.remove('visually-hidden');
 
   const lightbox = new SimpleLightbox('.gallery a', {
     captionDelay: '250',
