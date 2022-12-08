@@ -19,11 +19,14 @@ refs.form.addEventListener('submit', onSearchButton);
 function onSearchButton(e) {
   e.preventDefault();
 
+  query = e.target.elements.searchQuery.value;
+
+  console.log(query, e.target.elements.searchQuery.value);
+
   if (query !== e.target.elements.searchQuery.value) {
     refs.gallery.innerHTML = '';
   }
 
-  query = e.target.elements.searchQuery.value;
   onFetch().then(respdata => {
     if (respdata.hits.length === 0) {
       Notiflix.Notify.warning(
@@ -31,41 +34,19 @@ function onSearchButton(e) {
       );
     }
     respdata.hits.map(item => data.push(item));
+    render(data);
 
-    const markup = data.map(i => render(i)).join('');
-    refs.gallery.insertAdjacentHTML('beforeend', markup);
+    // const markup = data.map(i => render(i)).join('');
+    // refs.gallery.insertAdjacentHTML('beforeend', markup);
 
     refs.gallery.addEventListener('click', onImageClick);
   });
 }
 
-function render({
-  webformatURL,
-  tags,
-  likes,
-  views,
-  comments,
-  downloads,
-  largeImageURL,
-}) {
-  const item = `<a href=${largeImageURL}><div class="photo-card">
-  <img src=${webformatURL} alt=${tags} loading="lazy"  />
-  <div class="info">
-    <p class="info-item">
-      <b>Likes</b><br>${likes}
-    </p>
-    <p class="info-item">
-      <b>Views</b><br>${views}
-    </p>
-    <p class="info-item">
-      <b>Comments</b><br>${comments}
-    </p>
-    <p class="info-item">
-      <b>Downloads</b><br>${downloads}
-    </p>
-  </div>
-</div></a>`;
-  return item;
+function render() {
+  refs.gallery.innerHTML = '';
+  const markup = data.map(template).join('');
+  refs.gallery.insertAdjacentHTML('beforeend', markup);
 }
 
 async function onFetch() {
@@ -86,4 +67,32 @@ function onImageClick(e) {
   const lightbox = new SimpleLightbox('.gallery a', {
     captionDelay: '250',
   });
+}
+
+function template({
+  webformatURL,
+  tags,
+  likes,
+  views,
+  comments,
+  downloads,
+  largeImageURL,
+}) {
+  return `<a href=${largeImageURL}><div class="photo-card">
+  <img src=${webformatURL} alt=${tags} loading="lazy"  />
+  <div class="info">
+    <p class="info-item">
+      <b>Likes</b><br>${likes}
+    </p>
+    <p class="info-item">
+      <b>Views</b><br>${views}
+    </p>
+    <p class="info-item">
+      <b>Comments</b><br>${comments}
+    </p>
+    <p class="info-item">
+      <b>Downloads</b><br>${downloads}
+    </p>
+  </div>
+</div></a>`;
 }
