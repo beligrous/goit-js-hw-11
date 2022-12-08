@@ -39,6 +39,7 @@ function onSearchButton(e) {
     }
     respdata.hits.map(item => data.push(item));
     render(data);
+    Notiflix.Notify.success(`Hooray! We found ${respdata.totalHits} images.`);
 
     refs.loadMoreBtn.addEventListener('click', () => {
       page += 1;
