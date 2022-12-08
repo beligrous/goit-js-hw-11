@@ -24,7 +24,6 @@ function onSearchButton(e) {
 
   query = e.target.elements.searchQuery.value;
   onFetch().then(respdata => {
-    console.log(respdata.hits);
     respdata.hits.map(item => data.push(item));
 
     const markup = data.map(i => render(i)).join('');
@@ -64,9 +63,12 @@ function render({
 }
 
 async function onFetch() {
-  const res = await fetch(
-    `${URL}?key=${KEY}&q=${query}&image_type=photo&orientation=horizontal&savesearch=true`
-  ).then(res => res.json());
+  const res = await axios
+    .get(
+      `${URL}?key=${KEY}&q=${query}&image_type=photo&orientation=horizontal&savesearch=true`
+    )
+    .then(res => res.data);
+
   return res;
 }
 
