@@ -7,7 +7,7 @@ import axios from 'axios';
 const URL = 'https://pixabay.com/api/';
 const KEY = '31877726-de77d5eff1f0b572f2213dfa6';
 let query = '';
-let page = 0;
+let page = 1;
 const perPage = 40;
 let data = [];
 
@@ -21,15 +21,12 @@ refs.form.addEventListener('submit', onSearchButton);
 
 function onSearchButton(e) {
   e.preventDefault();
+  data = [];
+  refs.gallery.innerHTML = '';
 
   query = e.target.elements.searchQuery.value;
   refs.loadMoreBtn.classList.remove('visually-hidden');
-
-  page += 1;
-
-  // if (query !== e.target.elements.searchQuery.value) {
-  //   refs.gallery.innerHTML = '';
-  // }
+  page = 1;
 
   onFetch().then(respdata => {
     if (respdata.hits.length === 0) {
@@ -42,14 +39,13 @@ function onSearchButton(e) {
     Notiflix.Notify.success(`Hooray! We found ${respdata.totalHits} images.`);
 
     refs.loadMoreBtn.addEventListener('click', () => {
-      page += 1;
-      console.log(page * perPage, respdata.totalHits);
       if (Number(page * perPage) > Number(respdata.totalHits)) {
         Notiflix.Notify.warning(
           "We're sorry, but you've reached the end of search results."
         );
         refs.loadMoreBtn.classList.add('visually-hidden');
       }
+      page += 1;
       onFetch().then(respdata => {
         respdata.hits.map(item => data.push(item));
         render(data);
