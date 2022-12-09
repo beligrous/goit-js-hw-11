@@ -23,9 +23,7 @@ function onSearchButton(e) {
   e.preventDefault();
   data = [];
   refs.gallery.innerHTML = '';
-
   query = e.target.elements.searchQuery.value;
-  refs.loadMoreBtn.classList.remove('visually-hidden');
   page = 1;
 
   onFetch().then(respdata => {
@@ -33,10 +31,12 @@ function onSearchButton(e) {
       Notiflix.Notify.warning(
         'Sorry, there are no images matching your search query. Please try again.'
       );
+    } else {
+      Notiflix.Notify.success(`Hooray! We found ${respdata.totalHits} images.`);
+      refs.loadMoreBtn.classList.remove('visually-hidden');
     }
     respdata.hits.map(item => data.push(item));
     render(data);
-    Notiflix.Notify.success(`Hooray! We found ${respdata.totalHits} images.`);
 
     refs.loadMoreBtn.addEventListener('click', () => {
       if (Number(page * perPage) > Number(respdata.totalHits)) {
