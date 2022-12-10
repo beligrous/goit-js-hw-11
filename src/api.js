@@ -2,12 +2,11 @@ import axios from 'axios';
 import Notiflix from 'notiflix';
 Notiflix.Notify.init({});
 
-import { refs, render, template, query, data } from '.';
+import { refs, render, template, query, data, page } from '.';
 
 const URL = 'https://pixabay.com/api/';
 const KEY = '31877726-de77d5eff1f0b572f2213dfa6';
 
-export let page = 1;
 const perPage = 40;
 
 export async function onFetch() {

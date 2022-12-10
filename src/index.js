@@ -1,7 +1,7 @@
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 
-import { onFetch, request, page } from './api';
+import { onFetch, request } from './api';
 
 export const refs = {
   form: document.querySelector('#search-form'),
@@ -11,6 +11,7 @@ export const refs = {
 
 export let query = '';
 export let data = [];
+export let page = 1;
 
 refs.form.addEventListener('submit', onSearchButton);
 
