@@ -7,7 +7,7 @@ import { refs, render, template, query, data } from '.';
 const URL = 'https://pixabay.com/api/';
 const KEY = '31877726-de77d5eff1f0b572f2213dfa6';
 
-let page = 1;
+export let page = 1;
 const perPage = 40;
 
 export async function onFetch() {

@@ -1,7 +1,7 @@
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 
-import { onFetch, request } from './api';
+import { onFetch, request, page } from './api';
 
 export const refs = {
   form: document.querySelector('#search-form'),
