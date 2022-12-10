@@ -1,21 +1,16 @@
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
-import Notiflix from 'notiflix';
-Notiflix.Notify.init({});
-import axios from 'axios';
 
-const URL = 'https://pixabay.com/api/';
-const KEY = '31877726-de77d5eff1f0b572f2213dfa6';
-let query = '';
-let page = 1;
-const perPage = 40;
-let data = [];
+import { onFetch, request } from './api';
 
-const refs = {
+export const refs = {
   form: document.querySelector('#search-form'),
   gallery: document.querySelector('.gallery'),
   loadMoreBtn: document.querySelector('.load-more'),
 };
+
+export let query = '';
+export let data = [];
 
 refs.form.addEventListener('submit', onSearchButton);
 
@@ -25,36 +20,10 @@ function onSearchButton(e) {
   refs.gallery.innerHTML = '';
   query = e.target.elements.searchQuery.value;
   page = 1;
-
-  onFetch().then(respdata => {
-    if (respdata.hits.length === 0) {
-      Notiflix.Notify.warning(
-        'Sorry, there are no images matching your search query. Please try again.'
-      );
-    } else {
-      Notiflix.Notify.success(`Hooray! We found ${respdata.totalHits} images.`);
-      refs.loadMoreBtn.classList.remove('visually-hidden');
-    }
-    respdata.hits.map(item => data.push(item));
-    render(data);
-
-    refs.loadMoreBtn.addEventListener('click', () => {
-      if (Number(page * perPage) > Number(respdata.totalHits)) {
-        Notiflix.Notify.warning(
-          "We're sorry, but you've reached the end of search results."
-        );
-        refs.loadMoreBtn.classList.add('visually-hidden');
-      }
-      page += 1;
-      onFetch().then(respdata => {
-        respdata.hits.map(item => data.push(item));
-        render(data);
-      });
-    });
-  });
+  request(data);
 }
 
-function render() {
+export function render() {
   const markup = data.map(template).join('');
   refs.gallery.innerHTML = '';
   refs.gallery.insertAdjacentHTML('beforeend', markup);
@@ -62,16 +31,6 @@ function render() {
   const lightbox = new SimpleLightbox('.gallery a', {
     captionDelay: '250',
   });
-}
-
-async function onFetch() {
-  const res = await axios
-    .get(
-      `${URL}?key=${KEY}&q=${query}&image_type=photo&orientation=horizontal&savesearch=true&page=${page}&per_page=${perPage}`
-    )
-    .then(res => res.data);
-
-  return res;
 }
 
 function onImageClick(e) {
@@ -82,7 +41,7 @@ function onImageClick(e) {
   lightbox();
 }
 
-function template({
+export function template({
   webformatURL,
   tags,
   likes,
